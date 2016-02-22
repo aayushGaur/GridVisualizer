@@ -1,0 +1,2 @@
+# GridVisualizer
+This is a web based tool to generate visualisations of verylarge realworld power networks in order to efficiently communicate the structure of these networks to the power system researchers and practitioners. It has been developed as a part of summer research project in collaboration with NICTA (Data61) and Monash University.  The first version of the tool will be tagged by 31 March 2016.
