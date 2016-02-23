@@ -580,7 +580,7 @@
 	function powerNetworkGraph() {
 		//Need to be made a global object.
 		nodes = COMPRESSED_NET[0].nodes;
-		list = COMPRESSED_NET[0].links;
+		list = COMPRESSED_NET[0].branchDO;
 		g = createGraph();
 		
 		/*Region Begins - Investigation code for adding the dynamic link funcationality for the graph */

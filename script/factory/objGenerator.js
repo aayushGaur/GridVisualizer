@@ -2,6 +2,8 @@
 //The parsing rules used to create the objects are defined in the parserRules.js FILE.
 (function(){
 	NETWORK.ObjectFactory = function () {
+		this.summarizer = new NETWORK.Summarizer();
+		
 		var DO = this.DO(this.infoForObjectGeneration());
 		this.updateNodeData(DO);
 		
@@ -16,6 +18,7 @@
 		NETWORK.distinctVoltages.sort(sortNumber);
 		this.performNodeColorMapping();
 		
+		//Gets the data objects for the instance of the object factory.
 		this.getDO = function() {
 			return DO;
 		};
@@ -28,7 +31,7 @@
 	* @return 	The master object containing all the relevant Network object.**/
 	NETWORK.ObjectFactory.prototype.DO = function(JSONString) {
 		var infoObject = JSON.parse(JSONString);
-		var nC = [];
+		var nC = {};
 		for(item in infoObject)
 		{
 			switch(infoObject[item].name)
@@ -339,7 +342,7 @@
 	*	Also adds the Node Edge Map to the NETWORK - This information once generated is independent of the Data Objects thus not attached in the Data Objects.
 	*/
 	NETWORK.ObjectFactory.prototype.updateEdgesData = function(n) {
-		var edges = {}, nodeObjectMap = {}, edgeMapForMultiLine = [];
+		var edges = {}, nodeObjectMap = {}, edgeMapForMultiLine = [], arrayOnlyMulipleLine = [];
 		
 		for (i = 0; i < n.branchDO.dOL.length; i++) {
 			var e = n.branchDO.dOL[i];			
@@ -363,10 +366,11 @@
 				}, edges);
 				en = en.slice(0, - 2);	
 				en = en + "-" + er;
+				arrayOnlyMulipleLine.push(en);
 			}
 			edgeMapForMultiLine.push(en);
 		
-
+			
 			/***** Region Begins - Add Thermal Rating to the edge *****/
 				var delta, cosDel, sb, tb, srcVmSq, trgVmSq, ySquared, equSecPart, V1, V2, UB,ew;
 				delta = Math.max(parseFloat(e.angmin),parseFloat(e.angmax));
@@ -400,35 +404,36 @@
 			var ew = Math.sqrt((1/((e.r * e.r) + (e.x * e.x))));
 			edges[en] = { "index":i + 1, "edgeId" : ("From Bus '" + e.fbus + "' to Bus '" + e.tbus +"'"), "source": NETWORK.nodeEdgeMap[e.fbus], "target": NETWORK.nodeEdgeMap[e.tbus], "edgeData" : e, "edgeType" : et, "edgeName": en, "isMultiLine" : m, "edgeWeight" :  ew, };
 			
-			/***** Region Begins - Adding the admittance and neighbours for the node. *****/
+			/***** Region Begins - Adding the adm and neighbours for the node. *****/
 			var q, b, bi, admEnt;
 			for(q = 0; q < n.busDO.dOL.length; q++) {
 				b = n.busDO.dOL[q];
-				if(b["admittance"] === undefined) {
-					b["admittance"] = 0;
+				if(b["adm"] === undefined) {
+					b["adm"] = 0;
 					b["neighbours"] = [];
 					b["neighbourList"] = [];
 				}
-				//bi = parseInt(b.bus_i - 1);
 				bi = parseInt(b.bus_i);
 				if(bi === parseInt(e.fbus) && b.neighbourList.indexOf(e.tbus) === -1) {
-					b.admittance += ew;
+					b.adm += ew;
 					admEnt = {};
 					admEnt["id"] = e.tbus;
-					admEnt["admittance"] = ew;
+					admEnt["originaladm"] = ew;
+					admEnt["adm"] = ew;
 					b.neighbours.push(admEnt);
 					b.neighbourList.push(e.tbus);
 				}
 				else if(bi === parseInt(e.tbus) && b.neighbourList.indexOf(e.fbus) === -1) {
-					b.admittance += ew;
+					b.adm += ew;
 					admEnt = {};
 					admEnt["id"] = e.fbus;
-					admEnt["admittance"] = ew;
+					admEnt["originaladm"] = ew;
+					admEnt["adm"] = ew;
 					b.neighbours.push(admEnt);
 					b.neighbourList.push(e.fbus);
 				}
 			}
-			/***** Region ends - Adding the admittance and neighbours for the node.. *****/
+			/***** Region ends - Adding the adm and neighbours for the node.. *****/
 		}
 		
 		var ed = [];		
@@ -554,240 +559,7 @@
 		}
 	};
 
-	/**
-	*	This method compresses the graph. The logic for compression is as follows:
-	*	1. Sort the nodes in ascending order of admittance.
-	*	2. Find the node with the lowest admittance.
-	*	3. Collapse the node with to its lowest neighbour.
-	**	4. This step is not implemented as yet - Check for the thershold and other constraints.
-	*	5. Use the node compress information to make the link data structure.
-	**/
-	NETWORK.ObjectFactory.prototype.compressGraph = function(n,lvl) {
-		//Sort the input based on the admittance.
-		function sortLinksOnAdmittance(a,b) {
-			return a.admittance - b.admittance;
-		}
-		
-		var nodeList = this.compressNodes(NET_OBJ.busDO.dOL,1);
-		//Compressing the nodes and getting the links of the compressed graph.
-		var newLinks = [], newNodes = [], nl;
-			
-		for(var e = 0; e < nodeList.length; e++) {
-			if(nodeList[e].remove === false) {
-				newNodes.push(nodeList[e]);
-			}
-		}
-		newNodes = newNodes.sort(sortLinksOnAdmittance);
-		newLinks = [];
-		nl = newNodes.length;
-		//Finding the links between the nodes that remain from the filter.
-		for(var i = nl-1; i >= 0; i--)  {
-		var bus_i = newNodes[i].bus_i;
-		var bFound = false;
-			for(var k = nl-1; k > 0; k--) {
-				if(newNodes[k].neighbourList.indexOf(bus_i) !== -1 && newNodes[k].bus_i !== bus_i) {
-					var link = {};
-					link["source"] = bus_i;
-					link["target"] = newNodes[k].bus_i;
-					newLinks.push(link);
-					bFound = true;
-				}
-			}
-			//checking for the presence of one or more neighbours of the node inside the neighbourlist of other nodes.
-			if(!bFound) {
-				var neighbourSearch = newNodes[i].neighbourList;		
-				for(var j = nl-1; j >= 0; j--) {
-					for(var l = 0; l < neighbourSearch.length; l++) {
-						if(newNodes[j].neighbourList.indexOf(neighbourSearch[l]) !== -1 && newNodes[j].bus_i !== bus_i) {
-							var link = {};
-							link["source"] = bus_i;
-							link["target"] = newNodes[j].bus_i;
-							newLinks.push(link);
-							bFound = true;
-							break;
-						}
-					}
-				}
-			}
-		}
-		//Making the bus_i and nodeDataMap
-		var updatedNodes = {};
-		for(var x = 0; x < newNodes.length; x++) {
-			updatedNodes[newNodes[x]["bus_i"]] = newNodes[x];
-			
-		}
-		var crtLvl = {};
-		crtLvl["level"] = lvl;
-		crtLvl["nodes"] = updatedNodes;
-		crtLvl["links"] = newLinks;
-		COMPRESSED_NET.push(crtLvl);
-
-	};
 	
-	
-	NETWORK.ObjectFactory.prototype.compressNodes = function(list, repeatTimes) {
-		var maxAdm = 0, minAdm = 0;
-		var admitanceValues = [];
-		
-		//Sort the input based on the admittance.
-		function sortLinksOnAdmittance(a,b) {
-			admitanceValues.push(a.admittance);
-			admitanceValues.push(b.admittance);
-			
-			return a.admittance - b.admittance;
-		}
-		function sortarray(a,b) {
-			return a - b;
-		}
-		function getMax(x) {
-			var y = x.length;
-			if(x.length >= 4) {
-				if((x[y-1] * .9) > x[y-2]) {
-					return x[y-2];
-				}
-				else if((x[y-1] * .9) > x[y-3]) {
-					return x[y-3];
-				}
-				else if((x[y-1] * .9) > x[y-4]) {
-					return x[y-4];
-				}
-				else {
-					return x[y-1];
-				}
-			}
-			
-		}
-		
-		for(var x = 0; x < repeatTimes; x++) {
-			//Sorting the list in ascending order based on admittance.
-			var nodeList = list.sort(sortLinksOnAdmittance);			
-			var max = getMax($.distinct(admitanceValues).sort(sortarray));
-			
-			//Creating the Map for the sorted and unsorted positions and sorting the neighbours of each node.
-			var sortedMap = {};
-			for(e = 0; e < nodeList.length; e++) {
-				//Creating the sorted map.
-				sortedMap[nodeList[e]["bus_i"]] = e;
-				   
-				//Sorting the neighbours based on admittance.
-				nodeList[e].neighbours.sort(sortLinksOnAdmittance);
-				
-				/***** Region Begin - Investigation Code for removing the same node from being added twice *****/
-				//This logic should be covered in the other for loops...but it is being checked here as a part of Investigative Code.
-				var a = nodeList[e].neighbours.length;
-				while(a--) {
-					if(nodeList[e].bus_i === nodeList[e].neighbours[a].id) {
-						nodeList[e].neighbours.splice(a, 1);
-					}
-				}
-				/***** Region Ends -  Investigation Code for removing the same node from being added twice *****/
-			}
-			
-			for(var i = 0; i < nodeList.length; i++) {
-				var nodeIDCheck = parseInt(nodeList[i].bus_i);
-				//if(nodeIDCheck === 1410 || nodeIDCheck === 1409 || nodeIDCheck === 1608 || nodeIDCheck === 1609) {
-				if(nodeIDCheck === 1609) {
-					console.log(i);
-				}
-				
-				if((nodeList[i].remove === undefined || nodeList[i].remove === false) && nodeList[i].neighbours.length > 0) {
-					if(nodeList[i].admittance <= nodeList[sortedMap[nodeList[i].neighbours[0].id]].admittance) {
-						//Removing the item from the nodeList and adding its neighbours to the node in which it has been compressed.
-						nodeList[sortedMap[nodeList[i].neighbours[0].id]].admittance = 
-							nodeList[sortedMap[nodeList[i].neighbours[0].id]].admittance + nodeList[i].admittance - nodeList[i].neighbours[0].admittance;
-					
-						//Adding the node index to the neighbourList if it is already not present in the list.
-						if(nodeList[sortedMap[nodeList[i].neighbours[0].id]].neighbourList.indexOf(nodeList[i].bus_i) === -1) {
-							nodeList[sortedMap[nodeList[i].neighbours[0].id]].neighbourList.push(nodeList[i].bus_i);
-						}
-						
-						//Adding all the neighbours of the first neighbour to the node.
-						var nN = nodeList[i].neighbourList;
-						for(var j = 0; j < nN.length; j++) {
-							//Adding all the neighbours of the first neighbour to the node if they are already not present in the list.
-							if(nodeList[sortedMap[nodeList[i].neighbours[0].id]].neighbourList.indexOf(nN[j]) === -1) {
-								nodeList[sortedMap[nodeList[i].neighbours[0].id]].neighbourList.push(nN[j]);
-							}
-						}
-						
-						//Removing the current node from the Neighbour array of the node as this will always have value lower than that of the node...
-						//the above explanantion is ambiguous... :P
-						var n = nodeList[sortedMap[nodeList[i].neighbours[0].id]].neighbours;
-						for(var k = 0; k < n.length; k++) {
-							if(n[k].id === nodeList[i].bus_i) {
-								n.splice(k, 1);
-							}
-						}
-						if(n.length > 0) {
-							nodeList[sortedMap[nodeList[i].neighbours[0].id]].neighbours = n;
-							
-							//Removing the common neighbours and the first neighbour from the node...The filtered neighbours will be added to the neighbour list of the first neighbour of the node.
-							var m = nodeList[i].neighbours;
-							var firstNeighbourID = m[0].id;
-							var z = nodeList[sortedMap[firstNeighbourID]].neighbours;
-							var l = m.length - 1;
-							while(l >= 0) {
-								var decL = true;
-								for(var k = 0; k < z.length; k++) {
-									if(z[k].id.toString() === "1608") {
-										console.log("123");
-									}
-									if(m.length > 0) {							
-										if(m[l].id === z[k].id) {
-											m.splice(l, 1);
-											if(l > 0) {
-												l = l - 1;
-											}
-											decL = false;
-										}
-									}
-									if(m.length > 0) {							
-										if(m[l].id === nodeList[sortedMap[firstNeighbourID]].bus_i) {
-											m.splice(l, 1);
-											if(l > 0) {
-												l = l - 1;
-											}
-											decL = false;
-										}
-									}
-								}
-								if(decL) {
-									l = l - 1;
-								}
-							}
-
-							//This is highly inefficient coding...but I just want it to work for the presentation.
-							//Check for - All the neighbours between the nodes might be common and already removed.
-							/*if(m.length > 0) {							
-								var r = m.length - 1;
-								while(r--) {
-									//Removing the node itself from the neighbours.
-									if(m[r].id === nodeList[sortedMap[m[0].id]].bus_i) {
-										m.splice(r, 1);
-									}
-								}
-							}*/
-						
-							nodeList[i].neighbours = m;
-						
-							if(nodeList[i].neighbours.length > 0) {
-								nodeList[sortedMap[nodeList[i].neighbours[0].id]].neighbours.push.apply(nodeList[sortedMap[nodeList[i].neighbours[0].id]].neighbours, nodeList[i].neighbours);
-							}
-							else {
-								//do nothing as the node had only one neighbour which has been removed.
-							}
-						}
-						nodeList[i].remove = true;
-					}
-					else {
-						nodeList[i].remove = false;
-					}
-				}
-			}
-		}
-		return nodeList;
-	};
-
 	//Adding distinct function for jQuery Array
 	$.extend({
 		distinct : function(array) {
@@ -800,6 +572,4 @@
 		   return r;
 		}
 	});
-
-		
 })(NETWORK || (NETWORK = {}));

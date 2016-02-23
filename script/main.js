@@ -27,12 +27,18 @@ function drawGraph(event) {
 	reader.onload = function(event) { 
 		FILE = event.target.result;
 		//try {
+			var Summarizer = new NETWORK.Summarizer();
 			var ObjectFactory = new NETWORK.ObjectFactory();
 			NET_OBJ = ObjectFactory.getDO();
 			
+			//shadow factory and shadow objects - this approach was used because the deep copy was talking too much time and the other ways were not fool proof.
 			var shadowObjectFactory = new NETWORK.ObjectFactory();
 			var shadowNetworkObjects = shadowObjectFactory.getDO();
-			var compressedGraph = ObjectFactory.compressGraph(shadowNetworkObjects,"level1");
+			var compressedGraph = Summarizer.summarizerGraph(NET_OBJ,2);
+			
+			//Adding the compressed graph to the compressed network object.
+			COMPRESSED_NET.push(compressedGraph);
+			
 			var Solution = new NETWORK.Solution(NET_OBJ);
 			//Method to extract the different levels of KV along with tne number of nodes and their IDs;
 			populateKVBasedGrouping();
