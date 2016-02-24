@@ -177,16 +177,16 @@ function preparePageForInteraction() {
 		width: 250,
 		speed: 700,
 		shown: function(slider, trigger){
-			alert("After opened!");
+			console.log("slider opened!");
 		},
 		  hidden: function(slider, trigger){
-			alert("After closed!");
+			console.log("slider closed!");
 		  },
 		  show: function(slider, trigger){
-			alert("Before open!");
+			console.log("slider before opened!");
 		  },
 		  hide: function(slider, trigger){
-			alert("Before close!");
+			console.log("slider before close!");
 		  }
 	});
 }
