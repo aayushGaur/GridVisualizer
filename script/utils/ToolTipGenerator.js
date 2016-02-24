@@ -5,6 +5,7 @@ ip gen Class :
 *	3. It uses the rules for each object to display the custom tool tip on the object.	
 *
 **/
+
 NETWORK.TOOLTIP = (function(){
 	/**
 	*	Internal mehtod of the Static class - Used to get the HTML for the tool-tip. 
@@ -45,7 +46,9 @@ NETWORK.TOOLTIP = (function(){
 				var y = r[i].data.split(".");
 				for(var l = 0; l < y.length; l++) {
 					if (p === null) {	p = d[y[l]];	}
-					else {	p = p[y[l]];	}
+					else {	
+						p = p[y[l]];
+					}
 				}
 			}
 			else {
@@ -58,7 +61,8 @@ NETWORK.TOOLTIP = (function(){
 			if(typeof p === 'undefined' || p === null || p === "") {
 					//Log here that the value of a tool-tip attr is undefined.
 			}
-			else {			
+			else {
+				p = repeatedInsert(48 ,"<br/>", p);
 				if(z === "Title") {
 					var T = "<div style='text-align:center'>"+ r[i].preTVT + p + r[i].postTitleValText + u + "</div>";
 					tTHS = T + tTHS;
@@ -120,6 +124,29 @@ NETWORK.TOOLTIP = (function(){
 		return t;
 	};
 	
+	
+	/**
+	*	This allows the user to add charaters at the specified location in the string. 
+	* 	This has been added to allow the values in the tooltip to be multiline if they exceed a certain limit.
+	*	@param	 i		The intervals after which the characters are to be added.
+	*	@param	 val	The value that needs to be added to the string.
+	*	@returns	The updated string value.
+	*/
+	var repeatedInsert = function (i,val,str) {
+		var P = [], r = "";
+		while (str.length > i) {
+			P.push(str.substring(0,i));
+			str = str.substring(i,str.length);
+		}
+			
+		//Pushing the last part of p; also handles the case in which the length of p is less than 
+		P.push(str);
+		
+		for(var l = 0; l < P.length; l++) 
+			r = r + P[l] + val;
+		
+		return r;
+	};
 	//The Methods mentioned in the return are exposed as public methods for the Class (Implemented as pure Static).
 	return {
 		/**

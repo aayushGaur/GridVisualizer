@@ -34,7 +34,7 @@ function drawGraph(event) {
 			//shadow factory and shadow objects - this approach was used because the deep copy was talking too much time and the other ways were not fool proof.
 			var shadowObjectFactory = new NETWORK.ObjectFactory();
 			var shadowNetworkObjects = shadowObjectFactory.getDO();
-			var compressedGraph = Summarizer.summarizerGraph(NET_OBJ,2);
+			var compressedGraph = Summarizer.summarizerGraph(NET_OBJ,1);
 			
 			//Adding the compressed graph to the compressed network object.
 			COMPRESSED_NET.push(compressedGraph);

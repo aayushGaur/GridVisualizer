@@ -270,6 +270,10 @@
 	  initPhysics();
 	  listenToGraphEvents();
 
+	 //These will help determine when the total Movement is to be checked. 
+	 //This is to stop the graph from wobbling once it has reached a stable layout.
+	 var timer = 0, hitcount = 0;
+	
 	return {
 		 //Performs one step of iterative layout algorithm     
 		step: function() {

@@ -159,9 +159,9 @@
 				var n = nodeList[i];
 				if((n.remove === undefined || n.remove === false) && n.neighbours.length > 0) {
 					
-					if(n.bus_i === "4728" || nodeList[sortedMap[n.neighbours[0].id]].bus_i === "4728") {
+					/*if(n.bus_i === "8310" || nodeList[sortedMap[n.neighbours[0].id]].bus_i === "6031") {
 						console.log(i);
-					}
+					}*/
 				
 				
 					var firstNegh = nodeList[sortedMap[n.neighbours[0].id]];
@@ -173,16 +173,16 @@
 						var nN = n.neighbours;
 						for(var j = 0; j < nN.length; j++) {
 							//Adding all the neighbours of the node to the first neighbour if they are already not present in the list.
-							var nodeFirstneighbourAllNeighbours = firstNegh.neighbours;
-							var b = nodeFirstneighbourAllNeighbours.length;
+							var m = firstNegh.neighbours;
+							var b = m.length;
 							var neighbourAlreadyPresent = false;
 							for(var h = 0; h < b; h++) {
-								if(nodeFirstneighbourAllNeighbours[h].id === nN[j].id) {
+								if(m[h].id === nN[j].id) {
 									neighbourAlreadyPresent = true;
 								}
 								
 								//Updating the adm of the first neighbour for all its neighbours.
-								var firstneighbourCurrentNeighbourAllNeighbours = nodeList[sortedMap[nodeFirstneighbourAllNeighbours[h].id]].neighbours;
+								var firstneighbourCurrentNeighbourAllNeighbours = nodeList[sortedMap[m[h].id]].neighbours;
 								var s = firstneighbourCurrentNeighbourAllNeighbours.length;
 								for(var q = 0; q < s; q++) {
 									if(firstneighbourCurrentNeighbourAllNeighbours[q].id === firstNegh.bus_i) {
@@ -208,7 +208,7 @@
 									neighbourAlreadyPresent = true;
 								}
 							}
-							if(neighbourAlreadyPresent === false) {
+							if(neighbourAlreadyPresent === false && nodeList[sortedMap[nN[d].id]].bus_i !== firstNegh.bus_i) {
 								var id = n.neighbours[0].id;
 								var originaladm = n.neighbours[0].originaladm;
 								var adm = nodeList[sortedMap[n["neighbours"][0]["id"]]].adm;
@@ -227,7 +227,6 @@
 								}
 							}
 						}
-						console.log(":");
 						/*if(n.length > 0) {
 							//firstNegh.neighbours = n;
 							
