@@ -167,6 +167,28 @@ function preparePageForInteraction() {
 		addEventHandler(collection[i], 'dragend', stopPropagationAndPreventDefault);
 		addEventHandler(collection[i], 'drop', stopPropagationAndPreventDefault);
 	}
+	
+	//Making Panels
+	$('#sliderleft').slideReveal({
+		trigger: $("#triggerleft"),
+		push : false,
+		overlay: true,
+		position: "left",
+		width: 250,
+		speed: 700,
+		shown: function(slider, trigger){
+			alert("After opened!");
+		},
+		  hidden: function(slider, trigger){
+			alert("After closed!");
+		  },
+		  show: function(slider, trigger){
+			alert("Before open!");
+		  },
+		  hide: function(slider, trigger){
+			alert("Before close!");
+		  }
+	});
 }
 	
 function addEventHandler(obj, evt, handler) {
@@ -237,8 +259,6 @@ function populateKVBasedGrouping() {
 	for(var i = 0; i < busObjs.length; i++) {
 		var kv = busObjs[i].baseKV;
 	
-
-		
 		if(kv in NodeKVMapping) {
 			//Commented as the node Ids are not yet required.
 			//NodeKVMapping[kv.toString()].bus_ids.push(busObjs[i].bus_i);

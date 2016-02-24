@@ -586,14 +586,26 @@
 		nodes = COMPRESSED_NET[0].nodes;
 		list = COMPRESSED_NET[0].branchDO;
 		g = createGraph();
-		
+		var availableBusID = [];
 		/*Region Begins - Investigation code for adding the dynamic link funcationality for the graph */
 		for (var i = 0; i < list.length; i++) {
 			var fromId = list[i].source,
 				toId = list[i].target;
-				g.addLink(fromId, toId, list[i], nodes);
+			g.addLink(fromId, toId, list[i], nodes);
+			if(availableBusID.indexOf(fromId) === -1) {
+				availableBusID.push(fromId);
+			}
+			if(availableBusID.indexOf(toId) === -1) {
+				availableBusID.push(toId);
+			}
+				
 		}
 		/*Region Ends*/
+		
+		
+		//Adding the search tag ids to the div
+		var searchBox1 = new NETWORK.SearchBox(availableBusID,"#tags");
+		searchBox1.autoComplete();
 		
 		//shortTestPathMatrixCola();
 		return g;
@@ -1511,7 +1523,8 @@ module.exports = function (graph, settings) {
 
   listenToGraphEvents();
 
-  var pixiGraphics = {
+  //This has been made a global variable and its definition has been added in the network file.
+  pixiGraphics = {
     /**
      * Allows client to start animation loop, without worrying about RAF stuff.
      */
@@ -1919,7 +1932,7 @@ module.exports = function (graphics, layout) {
   var graphGraphics = graphics.graphGraphics;
 
   addWheelListener(graphics.domContainer, function (e) {
-    zoom(e.clientX, e.clientY, e.deltaY < 0);
+    zoomHanlder(e.clientX, e.clientY, e.deltaY < 0);
   });
 
   addDragListener();
@@ -1936,7 +1949,8 @@ module.exports = function (graphics, layout) {
     }
   }());
 
-  function zoom(x, y, isZoomIn) {
+  //This function is also stored in a global variable so that the zoom can be accessed from the node search.
+  zoomHanlder = function zoom(x, y, isZoomIn) {
     direction = isZoomIn ? 1 : -1;
     var factor = (1 + direction * 0.1);
     graphGraphics.scale.x *= factor;

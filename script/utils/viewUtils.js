@@ -271,8 +271,15 @@ VIEWS.SharedFunctionality = (function(){
 			return vector;
 		},
 		
-		zoomOnElement : function(eleID) {			
-			var neighbourNodes = [];
+		zoomOnElement : function(eleID) {	
+			var nodeVectorPos = pixiGraphics.layout.getNodePosition(parseInt(eleID));
+			var i = 5;
+			while(i > 0) {
+				zoomHanlder(nodeVectorPos.x,nodeVectorPos.y,true);
+				--i;
+			}
+			
+			/*var neighbourNodes = [];
 			var ele = d3.select("#" + eleID);
 			var eleData = ele.node().__data__;
 			
@@ -317,7 +324,7 @@ VIEWS.SharedFunctionality = (function(){
 			zoom.translate([tx, ty]).scale(s);
 			
 			var vis = d3.select("#parentSvgNode").select("g");
-			vis .transition().duration(750) .attr("transform", "translate(" + zoom.translate() + ") scale(" + zoom.scale() + ")");
+			vis .transition().duration(750) .attr("transform", "translate(" + zoom.translate() + ") scale(" + zoom.scale() + ")");*/
 		},
 	
 		refreshCurrentPage : function() {
