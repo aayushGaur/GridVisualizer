@@ -278,10 +278,14 @@
 	return {
 		 //Performs one step of iterative layout algorithm     
 		step: function() {
-		  var totalMovement = physicsSimulator.step();
-		  updateGraphRect();
-
-		  return totalMovement < MAX_MOVEMENT;
+			if(boolAutoLayout) {
+				var totalMovement = physicsSimulator.step();
+				updateGraphRect();
+				return totalMovement < MAX_MOVEMENT;
+			}
+			else {
+				//Do nothing as the auto layout has been switched off.
+			}
 		},
 
 		//For a given 'nodeId' returns position
@@ -1547,7 +1551,7 @@ module.exports = function (graph, settings) {
      * @returns {object} arbitrary object which will be later passed to renderNode
      */
     /**
-     * This function allows clients to pass custon node UI creation callback
+     * This function allows clients to pass custom node UI creation callback
      * 
      * @param {createNodeUICallback} createNodeUICallback - The callback that 
      * creates new node UI

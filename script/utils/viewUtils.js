@@ -142,31 +142,16 @@ VIEWS.SharedFunctionality = (function(){
 		
 		/** Toggles the auto layout for the Graphs - If Auto layout is false and the Graph has Node locations then as per functionality sets the fixed position to false.**/
 		toggleAutoLayout : function() {
-				var parentEle;
-				if($("#parentSvgNode").is(":visible")) {
-						parentEle = d3.select("#parentSvgNode");
-				}
-				else {
-					parentEle = d3.select("#helpSvgNode");
-				}
 				
-				if(VIEWS.SharedFunctionality.autoLayout) {
+				if(boolAutoLayout) {
 					$("#autoLayoutToggle").toggleClass("activeButton");
-					VIEWS.SharedFunctionality.autoLayout = false;
-					d3.selectAll(".busIcon").attr("isFixed", function (d) { 
-							d.px = d.x;d.py = d.y;
-							d.fixed |= 8;
-						});
+					boolAutoLayout = false;
 				}
 				else {
 					$("#autoLayoutToggle").toggleClass("activeButton");
-					
-					d3.selectAll(".busIcon").attr("isFixed", function (d) {
-						d.px = d.x; d.py = d.y;
-						d.fixed &= ~8
-					});
-					triggerCustomDrag();
-					VIEWS.SharedFunctionality.autoLayout = true;
+					boolAutoLayout = true;
+
+					//triggerCustomDrag();
 				}
 		},
 			

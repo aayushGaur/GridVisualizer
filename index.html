@@ -48,6 +48,13 @@
 					<label> Range for Node Admittance </label>
 					<output></output>
 				</div>
+				<div class="floatCenterDiv">
+					<div class="buttonGroupLabels"> Layout </div>
+					<div id="autoLayoutToggle" onclick="VIEWS.SharedFunctionality.toggleAutoLayout()" class="demoButton activeButton">Auto</div>
+					<!--<div id="saveLayout" class="demoButton" style="margin-right:3px;">
+						<a id="AutoDownloadLayout" href="#" download="Layout.txt" onclick="VIEWS.SharedFunctionality.showLayout()">Export</a>
+					</div>-->
+				</div>
 			</div>
 			
 			<div id='triggerleft'>
@@ -62,14 +69,7 @@
 					<div id="dataValidationView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton">Validation</div>
 					<!--<div id="solutionView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton">Flow</div>-->
 				</div>
-				<div class="floatCenterDiv">
-					<div class="buttonGroupLabels"> Layout </div>
-					<div id="autoLayoutToggle" onclick="VIEWS.SharedFunctionality.toggleAutoLayout()" class="demoButton activeButton">Auto</div>
-					<div id="saveLayout" class="demoButton" style="margin-right:3px;">
-						<a id="AutoDownloadLayout" href="#" download="Layout.txt" onclick="VIEWS.SharedFunctionality.showLayout()">Export</a>
-					</div>
-					<div id="fixedPosition" onclick="VIEWS.SharedFunctionality.toggleFixedPosition()" class="demoButton">Initial</div>
-				</div>
+				
 				<div class="floatRightDiv">
 					<div class="buttonGroupLabels" style="margin-bottom:3px;"> Search </div>
 					<div style="display:inline; cursor:text;">

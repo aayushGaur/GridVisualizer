@@ -30,12 +30,16 @@ var g;
 
 //Global variable used to store the zoom functionality.
 var zoomHanlder;
+
+//Variable used to set to control the auto layout based on the user input.
+boolAutoLayout = true;
 /***** Region ends - Global Objects *****/
 
 (function(){
 	//Global Variable to store the different BaseKV values in the current network.
 	//This is an associative array used to store the value of the BaseKv and the related color.
-	//This is also used to show the legend along with the graph.	
+	
+	
 })(NETWORK || (NETWORK = {}));
 
 /***** Region - Class for Network Search Boxes *****/
