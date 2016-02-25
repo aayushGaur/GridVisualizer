@@ -272,10 +272,12 @@ VIEWS.SharedFunctionality = (function(){
 		},
 		
 		zoomOnElement : function(eleID) {	
-			var nodeVectorPos = pixiGraphics.layout.getNodePosition(parseInt(eleID));
+			var nPos = pixiGraphics.layout.getNodePosition(parseInt(eleID));
+			var gPos = pixiGraphics.stage.children[0].position;
+			var zoomPos = {x : (gPos.x - nPos.x), y : (gPos.y - nPos.y)};
 			var i = 5;
 			while(i > 0) {
-				zoomHanlder(nodeVectorPos.x,nodeVectorPos.y,true);
+				zoomHanlder(zoomPos.x,zoomPos.y,true);
 				--i;
 			}
 			
