@@ -31,10 +31,15 @@ function drawGraph(event) {
 			var ObjectFactory = new NETWORK.ObjectFactory();
 			NET_OBJ = ObjectFactory.getDO();
 			
+			//Creating the range control
+			var nodeAdmittanceRangeSlider = new NETWORK.Slider(NET_OBJ.nodeAdmittanceRange);
+			var initailVal = (NET_OBJ.nodeAdmittanceRange.max - NET_OBJ.nodeAdmittanceRange.min)/2
+			nodeAdmittanceRangeSlider.attachEvents();
+			
 			//shadow factory and shadow objects - this approach was used because the deep copy was talking too much time and the other ways were not fool proof.
 			var shadowObjectFactory = new NETWORK.ObjectFactory();
 			var shadowNetworkObjects = shadowObjectFactory.getDO();
-			var compressedGraph = Summarizer.summarizerGraph(NET_OBJ,1);
+			var compressedGraph = Summarizer.summarizerGraph(NET_OBJ,initailVal);
 			
 			//Adding the compressed graph to the compressed network object.
 			COMPRESSED_NET.push(compressedGraph);
@@ -42,6 +47,7 @@ function drawGraph(event) {
 			var Solution = new NETWORK.Solution(NET_OBJ);
 			//Method to extract the different levels of KV along with tne number of nodes and their IDs;
 			populateKVBasedGrouping();
+			
 		//}
 /*		catch(error) {
 				console.log(error);
@@ -70,6 +76,21 @@ function drawGraph(event) {
 	}
 	reader.readAsText(files[0]);
 }
+
+/***** Region Begins - Investigative Code for redrawing the graph for the new admittance value. *****/
+function reDrawGraphWithNewVal(newVal) {
+	var Summarizer = new NETWORK.Summarizer();
+	var ObjectFactory = new NETWORK.ObjectFactory();
+	NET_OBJ = ObjectFactory.getDO();
+	var compressedGraph = Summarizer.summarizerGraph(NET_OBJ,newVal);
+	COMPRESSED_NET= null;
+	COMPRESSED_NET = [];
+	COMPRESSED_NET.push(compressedGraph);
+	ngraph.main();
+	//Adding the compressed graph to the compressed network object.
+	//COMPRESSED_NET.push(compressedGraph);
+}
+/***** Region Ends - Investigative Code for redrawing the graph for the new admittance value. *****/
 
 /**
 *	Draws the Network Graph for the demo.

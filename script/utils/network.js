@@ -29,7 +29,7 @@ var pixiGraphics;
 var g;
 
 //Global variable used to store the zoom functionality.
-var zoom;
+var zoomHanlder;
 /***** Region ends - Global Objects *****/
 
 (function(){
@@ -39,7 +39,7 @@ var zoom;
 })(NETWORK || (NETWORK = {}));
 
 /***** Region - Class for Network Search Boxes *****/
-/**	This Class is responsible for providing the Search boxes for the Network Visualization.
+/**	This Objects of this class represent the Search boxes for the Network Visualization.
 *		The functionality provided for the Search boxes are a follows:
 *		1. Auto complete with the relevant information that is to be associated with the search box.
 *		2. Zoom in functionality over the element that has been selected in the search box.

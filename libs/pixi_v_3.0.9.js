@@ -23287,7 +23287,6 @@ function TiltShiftAxisFilter()
             texSize:        { type: 'v2', value: { x: window.innerWidth, y: window.innerHeight } }
         }
     );
-	alert("what");
     this.updateDelta();
 }
 

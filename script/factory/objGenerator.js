@@ -18,6 +18,20 @@
 		NETWORK.distinctVoltages.sort(sortNumber);
 		this.performNodeColorMapping();
 		
+		
+		/***** Region to add the admittance and get the range *****/
+		//THIS CODE WILL BE MOVED TO THE UPDATE EDGE DATA FUNCTION ONCE THE LOGIC STARTS TO WORK.
+		var allAdm = [];
+		
+		for(i = 0; i < DO.busDO.dOL.length; i++) {
+			allAdm.push(DO.busDO.dOL[i].adm);
+		}
+		//Adding range of admittance to the Network Object.
+		DO["nodeAdmittanceRange"] = {};
+		DO.nodeAdmittanceRange["min"] = Math.min.apply(null, allAdm); 
+		DO.nodeAdmittanceRange["max"] = Math.max.apply(null, allAdm); 
+		
+		
 		//Gets the data objects for the instance of the object factory.
 		this.getDO = function() {
 			return DO;

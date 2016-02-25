@@ -54,6 +54,7 @@
 
 ({1:[function(require,module,exports) {
 	module.exports.main = function () {
+		$('canvas').remove();
 		var graph = require('ngraph.gens').powerNetworkGraph();
 		var createPixiGraphics = require('ngraph.pixi');
 		var pixiGraphics = createPixiGraphics(graph);
