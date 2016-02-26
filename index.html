@@ -40,50 +40,40 @@
 			
 			
 			<div id='sliderleft' class="sliderleft">
-				<div class="buttonGroupLabels" style="margin-bottom:3px;"> Search </div>
-				<div style="display:inline; cursor:text;">
-					<input id="tags" class="demoButton" placeholder="Enter Bus ID" style="width:98px; cursor:text;">
+				<div class="floatLeftDiv">
+					<div id="homeButton" onclick="VIEWS.SharedFunctionality.refreshCurrentPage()" class="demoButton">Home</div>
+					<div id="nodeAdmittanceWrapper">
+						<label> Range for Node Admittance </label>
+						<output></output>
+					</div>
 				</div>
-				<div id="nodeAdmittanceWrapper">
-					<label> Range for Node Admittance </label>
-					<output></output>
-				</div>
+				
 				<div class="floatCenterDiv">
 					<div class="buttonGroupLabels"> Layout </div>
 					<div id="autoLayoutToggle" onclick="VIEWS.SharedFunctionality.toggleAutoLayout()" class="demoButton activeButton">Auto</div>
 					<!--<div id="saveLayout" class="demoButton" style="margin-right:3px;">
 						<a id="AutoDownloadLayout" href="#" download="Layout.txt" onclick="VIEWS.SharedFunctionality.showLayout()">Export</a>
 					</div>-->
+					<div class="buttonGroupLabels" style="margin-bottom:3px;"> Search </div>
+					<div style="display:inline; cursor:text;">
+						<input id="tags" class="demoButton" placeholder="Enter Bus ID" style="width:98%; cursor:text;">
+					</div>
+				</div>
+				
+				
+				<div class="floatRightDiv">
+					<div class="navigateButtons">
+						<!--<div id="showHelp" onclick="VIEWS.SharedFunctionality.showHelp()" class="demoButton demoButtonZoom fontAwesome" style="display:inline" title="Click to show help Graph">&#xf059;</div>-->
+						<div id="zoomIn" onclick="VIEWS.SharedFunctionality.buttonZoom(true)" class="demoButton demoButtonZoom fontAwesome" title="Zoom In">&#xf00e;</div>
+						<div id="zoomOut" onclick="VIEWS.SharedFunctionality.buttonZoom(false)" class="demoButton demoButtonZoom fontAwesome" title="Zoom Out">&#xf010;</div>
+						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.autoFit" class="demoButton" style="margin-top:8px;">Auto Fit</div>
+					</div>
 				</div>
 			</div>
 			
 			<div id='triggerleft'>
 				<a class="panelleftButtonAnchor" href="#"></a>
 			</div>
-
-			<div id="d3div">
-				<div class="floatLeftDiv">
-					<div id="homeButton" onclick="VIEWS.SharedFunctionality.refreshCurrentPage()" class="demoButton">Home</div>
-					<div class="buttonGroupLabels"> Views </div>
-					<div id="dataView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton activeButton">Topology</div>
-					<div id="dataValidationView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton">Validation</div>
-					<!--<div id="solutionView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton">Flow</div>-->
-				</div>
-				
-				<div class="floatRightDiv">
-					<div class="buttonGroupLabels" style="margin-bottom:3px;"> Search </div>
-					<div style="display:inline; cursor:text;">
-						<input id="tags" class="demoButton" placeholder="Enter Bus ID" style="width:98px; cursor:text;">
-					</div>
-					<div class="navigateButtons">
-						<div id="showHelp" onclick="VIEWS.SharedFunctionality.showHelp()" class="demoButton demoButtonZoom fontAwesome" style="display:inline" title="Click to show help Graph">&#xf059;</div>
-						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(false)" class="demoButton demoButtonZoom fontAwesome" title="Zoom In">&#xf00e;</div>
-						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(true)" class="demoButton demoButtonZoom fontAwesome" title="Zoom Out">&#xf010;</div>
-						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.zoomToFit(true)" class="demoButton" style="margin-top:8px;">Auto Fit</div>
-					</div>
-				</div>
-			</div>
-			
 		<script type="text/javascript" src="script/utils/Slider.js"></script>		
 		<script type="text/javascript" src="script/main.js"></script>
 		<script type="text/javascript" src="script/utils/Rules.js"></script>

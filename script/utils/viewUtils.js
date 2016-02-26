@@ -78,69 +78,27 @@ VIEWS.SharedFunctionality = (function(){
 	//The Methods mentioned in the return are exposed as public methods for the Class (Implemented as pure Static).
 	return {
 		R :15,
-		autoLayout:true,
 		hasNodeLocationData:false,
 		goToInitialStateTriggered: false,
 		nodeMouseDown:false,
 		bShowHelp:false,
-		
-		createMouseEvent :function(type,x,y,bShiftKey) {
-			return createCustomMouseEvent(type,x,y,bShiftKey);
+	
+		/**
+		*	Handles the auto fit action for the graph. 
+		*	The graph is centered on the page and the default zoom level of 1 is set.
+		*/
+		autoFit : function() {
+			pixiGraphics.stage.children[0].position.x = window.innerWidth/2;
+			pixiGraphics.stage.children[0].position.y = window.innerHeight/2;
+			
+			pixiGraphics.stage.children[0].scale.x = 1;
+			pixiGraphics.stage.children[0].scale.y = 1;
 		},
 		
-		createCustomDrag : function(node,x,y) {
-			triggerCustomDrag(node,x,y);
-		},
-		
-		switchTabs : function(event) {
-			if($("#parentSvgNode").is(":visible")) {
-				var activeTabIndex = -1;
-				var tabNames = ["dataView","dataValidationView"];
-				
-				for(var i = 0; i < tabNames.length;i++) {
-					if(event.target.id == tabNames[i]) {
-						activeTabIndex = i;
-					} else {
-						$("#"+tabNames[i]).removeClass("activeButton");
-					}
-				}
-				$("#"+tabNames[activeTabIndex]).addClass("activeButton");
-				
-				if(activeTabIndex === 0) {
-					VIEWS.DataView.returnToView();
-				}
-				else if(activeTabIndex === 1) {
-					VIEWS.ValidationView.performValidation();
-				}	
-				else {
-					//handling of switching tab for the Solution View.
-				}
-			}
-			else {
-				//alert("Switching between views is not allowed for help Network.");
-			}
-		},
-		
-		zoomToFit : function(withCola) {
-			var cw = (window.innerWidth * .98) - 160 - (VIEWS.SharedFunctionality.R * 2);
-			var ch = (window.innerHeight *.85) + (VIEWS.SharedFunctionality.R * 1);
-			var b = graphBounds(withCola);
-			var w = b.X - b.x, h = b.Y - b.y;
-			var s = Math.min(cw / w, ch / h);
-			var tx = (-b.x * s + (cw / s - w) * s / 2);
-			var ty = (-b.y * s + (ch / s - h) * s / 2);
-			var selZoom;
-			if($("#parentSvgNode").is(":visible")) {
-				selZoom = zoom;
-			}
-			else {
-				selZoom = zoomHelp;
-			}
-			selZoom.translate([tx, ty]).scale(s);
-			redraw(true);
-		},
-		
-		/** Toggles the auto layout for the Graphs - If Auto layout is false and the Graph has Node locations then as per functionality sets the fixed position to false.**/
+		/** 
+		*	Toggles the auto layout for the Graphs - If Auto layout is false and the Graph has Node locations then 
+		*	as per functionality sets the fixed position to false.
+		*/
 		toggleAutoLayout : function() {
 				
 				if(boolAutoLayout) {
@@ -150,8 +108,6 @@ VIEWS.SharedFunctionality = (function(){
 				else {
 					$("#autoLayoutToggle").toggleClass("activeButton");
 					boolAutoLayout = true;
-
-					//triggerCustomDrag();
 				}
 		},
 			
@@ -225,20 +181,13 @@ VIEWS.SharedFunctionality = (function(){
 			}
 		},
 		
+		/** Controls that zoom in and zoom out funcationality for the graph. The center of the graph is taken as the foucs point of zoom.
+		*	@param bShiftKey	True for zoom in and false for zoom out.
+		*/
 		buttonZoom : function(bShiftKey) {
-			var svg;
-			//Select the background if it is visible; else select the help graph.
-			if($("#parentSvgNode").is(":visible")) {
-				svg = d3.select(".background");
-			}
-			else {
-				svg = d3.select(".backgroundHelp");
-			}
-			
-			var CenterX = svg.node().getBBox().width/2;
-			var CenterY = svg.node().getBBox().height /2;
-			var evt = createCustomMouseEvent('dblclick',CenterX,CenterY,bShiftKey);
-			svg.node().dispatchEvent(evt);
+			//Zoom in or zoom out on the center of the graph.
+			var gPos = pixiGraphics.stage.children[0].position;
+			zoomHanlder(gPos.x,gPos.y,bShiftKey);
 		},
 		
 		getVector : function (x1,y1,x2,y2) {
@@ -256,66 +205,25 @@ VIEWS.SharedFunctionality = (function(){
 			return vector;
 		},
 		
+		/** Handles the zoom action on a particular element.
+		*	@param	eleID	The id of the element to zoom in to.
+		*/
 		zoomOnElement : function(eleID) {	
 			var nPos = pixiGraphics.layout.getNodePosition(parseInt(eleID));
+			console.log(pixiGraphics.layout);
 			var gPos = pixiGraphics.stage.children[0].position;
 			var zoomPos = {x : (gPos.x - nPos.x), y : (gPos.y - nPos.y)};
+			
 			var i = 5;
 			while(i > 0) {
 				zoomHanlder(zoomPos.x,zoomPos.y,true);
 				--i;
 			}
-			
-			/*var neighbourNodes = [];
-			var ele = d3.select("#" + eleID);
-			var eleData = ele.node().__data__;
-			
-			if(typeof eleData.DOMID !== 'undefined') {
-				eleID = eleData.DOMID;
-				d3.select("#parentSvgNode").selectAll(".edge").each(function(d){
-					if(d.source.DOMID === eleID || d.target.DOMID === eleID) {
-						neighbourNodes.push(d.source);
-						neighbourNodes.push(d.target);
-					}
-				});
-			}
-			//Get both the target and the source nodes for a link
-			else {
-				eleID = eleData.source.DOMID;
-				var eleTargetID = eleData.target.DOMID;
-				d3.select("#parentSvgNode").selectAll(".edge").each(function(d){
-					if(d.source.DOMID === eleID || d.target.DOMID === eleID || d.source.DOMID === eleTargetID || d.target.DOMID === eleTargetID) {
-						neighbourNodes.push(d.source);
-						neighbourNodes.push(d.target);
-					}
-				});
-			}
-			
-			var cw = (window.innerWidth * .98) - 160 - (VIEWS.SharedFunctionality.R * 2);
-			var ch = (window.innerHeight *.85) + (VIEWS.SharedFunctionality.R * 1);
-			var b;
-			
-			var x = Number.POSITIVE_INFINITY, X=Number.NEGATIVE_INFINITY, y=Number.POSITIVE_INFINITY, Y=Number.NEGATIVE_INFINITY;	
-			neighbourNodes.forEach(function (v) {
-				x = Math.min(x, v.x - VIEWS.SharedFunctionality.R * 2);
-				X = Math.max(X, v.x);
-				y = Math.min(y, v.y  - VIEWS.SharedFunctionality.R * 2);
-				Y = Math.max(Y, v.y  + VIEWS.SharedFunctionality.R * 5);
-			});
-
-			var b = { x: x, X: X, y: y, Y: Y };
-			var w = b.X - b.x, h = b.Y - b.y;
-			var s = Math.min(cw / w, ch / h);
-			var tx = (-b.x * s + (cw / s - w) * s / 2);
-			var ty = (-b.y * s + (ch / s - h) * s / 2);
-			zoom.translate([tx, ty]).scale(s);
-			
-			var vis = d3.select("#parentSvgNode").select("g");
-			vis .transition().duration(750) .attr("transform", "translate(" + zoom.translate() + ") scale(" + zoom.scale() + ")");*/
 		},
 	
+		//Reloads the current page.
 		refreshCurrentPage : function() {
-			window.open(document.URL,"_self");
+			location.reload();
 		},
 		
 		showHelp : function() {

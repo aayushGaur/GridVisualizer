@@ -32,7 +32,7 @@ var g;
 var zoomHanlder;
 
 //Variable used to set to control the auto layout based on the user input.
-boolAutoLayout = true;
+var boolAutoLayout = true;
 /***** Region ends - Global Objects *****/
 
 (function(){
