@@ -4,7 +4,7 @@
 		<link rel="stylesheet" type="text/css" href="./css/baseStyler.css"/>
 		<link rel="stylesheet" type="text/css" href="./css/tabs.css"/>
 		<link rel="stylesheet" type="text/css" href="./css/views.css"/>
-		<link rel="stylesheet" type="text/css" href="./css/rangeslider.css"/>
+		<link rel="stylesheet" type="text/css" href="./css/controls.css"/>
 		
 		
 		<script src="libs/jquery-1.10.2.min.js" type="text/javascript"></script>
@@ -12,6 +12,7 @@
 		<script src="libs/slidereveal.js" type="text/javascript"></script>	
 		<script src="libs/pixi_v_3.0.9.js" type="text/javascript"></script>
 		<script src="libs/rangeslider.js" type="text/javascript"></script>
+		<script src="libs/d3.js" type="text/javascript"></script>
 		
 		<script type="text/javascript" src="script/utils/Network.js"></script>
 		<script type="text/javascript" src="script/utils/Logger.js"></script>
@@ -38,14 +39,14 @@
 				<img id="loadingImage" src="./resources/loading_anim.png" height="48" width="48">
 			</div>
 			
-			
-			<div id='sliderleft' class="sliderleft">
+			<!-- Left Side panel -->
+			<div id='panelleft' class="panelleft panel">
 				<div class="floatLeftDiv">
 					<div id="homeButton" onclick="VIEWS.SharedFunctionality.refreshCurrentPage()" class="demoButton">Home</div>
-					<div id="nodeAdmittanceWrapper">
-						<label> Range for Node Admittance </label>
-						<output></output>
+					<div id="nodeAdmittanceWrapper" class="hidden">
+						<div class="buttonGroupLabels"> Node Admittance Threshold </div>
 					</div>
+					<label class="admRangeSliderOutput"></label>
 				</div>
 				
 				<div class="floatCenterDiv">
@@ -59,23 +60,33 @@
 						<input id="tags" class="demoButton" placeholder="Enter Bus ID" style="width:98%; cursor:text;">
 					</div>
 				</div>
-				
-				
 				<div class="floatRightDiv">
 					<div class="navigateButtons">
 						<!--<div id="showHelp" onclick="VIEWS.SharedFunctionality.showHelp()" class="demoButton demoButtonZoom fontAwesome" style="display:inline" title="Click to show help Graph">&#xf059;</div>-->
 						<div id="zoomIn" onclick="VIEWS.SharedFunctionality.buttonZoom(true)" class="demoButton demoButtonZoom fontAwesome" title="Zoom In">&#xf00e;</div>
 						<div id="zoomOut" onclick="VIEWS.SharedFunctionality.buttonZoom(false)" class="demoButton demoButtonZoom fontAwesome" title="Zoom Out">&#xf010;</div>
-						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.autoFit" class="demoButton" style="margin-top:8px;">Auto Fit</div>
+						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.autoFit()" class="demoButton" style="margin-top:8px;">Auto Fit</div>
 					</div>
 				</div>
 			</div>
-			
-			<div id='triggerleft'>
-				<a class="panelleftButtonAnchor" href="#"></a>
+			<div id='triggerleft' class="hidden triggers">
+				<a class="panelButtonAnchor panelLeftButtonAnchor" href="#"></a>
 			</div>
-		<script type="text/javascript" src="script/utils/Slider.js"></script>		
+			
+			<!-- Right Side panel -->
+			<div id='panelright' class="panelright panel">
+			</div>
+			<div id='triggerright' class="hidden triggers">
+				<a class="panelButtonAnchor panelRightButtonAnchor" href="#"></a>
+			</div>
+		
+		<!-- Classes for various controls.-->		
+		<script type="text/javascript" src="script/controls/Slider.js"></script>
+		<script type="text/javascript" src="script/controls/Panel.js"></script>
+		<script type="text/javascript" src="script/controls/histogram.js"></script>
+		
 		<script type="text/javascript" src="script/main.js"></script>
+		<!-- Utils and other classes -->
 		<script type="text/javascript" src="script/utils/Rules.js"></script>
 		<script type="text/javascript" src="script/utils/ToolTipGenerator.js" ></script>
 		<script type="text/javascript" src="script/utils/viewUtils.js"></script>

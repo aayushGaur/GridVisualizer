@@ -1,12 +1,26 @@
+/***** Region begins - Range Slider *****/
 .rangeslider,
 .rangeslider__fill {
   display: block;
   -moz-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
   box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
-  -moz-border-radius: 10px;
+  /*-moz-border-radius: 10px;
   -webkit-border-radius: 10px;
-  border-radius: 10px;
+  border-radius: 10px;*/
+}
+
+.admRangeSliderOutput {
+	left: 2px;
+	top: 118px;
+	display: block;
+	position: absolute;
+	font-size : .95em;
+}
+
+#nodeAdmittanceWrapper {
+	position:relative;
+	top:12px;	
 }
 
 .rangeslider {
@@ -15,7 +29,8 @@
 }
 
 .rangeslider--horizontal {
-  height: 20px;
+  height: 12px;
+  top:14px;
   width: 100%;
 }
 
@@ -31,7 +46,7 @@
 }
 
 .rangeslider__fill {
-  background: #00ff00;
+  background: #87CEEB;
   position: absolute;
 }
 .rangeslider--horizontal .rangeslider__fill {
@@ -48,8 +63,8 @@
   border: 1px solid #ccc;
   cursor: pointer;
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  width: 21px;
+  height: 21px;
   position: absolute;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMC4xIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
   background-size: 100%;
@@ -67,8 +82,8 @@
 .rangeslider__handle:after {
   content: "";
   display: block;
-  width: 18px;
-  height: 18px;
+  width: 9.1875px;
+  height: 9.1875px;
   margin: auto;
   position: absolute;
   top: 0;
@@ -94,7 +109,7 @@
   background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.12));
 }
 .rangeslider--horizontal .rangeslider__handle {
-  top: -10px;
+  top: -6px;
   touch-action: pan-y;
   -ms-touch-action: pan-y;
 }
@@ -109,3 +124,28 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   -webkit-box-shadow: 0 0 8px rgba(255, 0, 255, 0.9);
   box-shadow: 0 0 8px rgba(255, 0, 255, 0.9);
 }
+/***** Region Ends - Range Slider *****/
+
+
+/***** Region begins - CSS for histogram *****/
+.histoBar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+}
+
+.histoBar text {
+  fill: black;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.histogramClass {
+  margin-top: 5px;
+  font: 10px sans-serif;
+  margin-left : 10px;
+  border: 2px solid black;
+}
+/***** Region Ends - CSS for histogram *****/

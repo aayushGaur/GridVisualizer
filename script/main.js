@@ -32,7 +32,7 @@ function drawGraph(event) {
 			NET_OBJ = ObjectFactory.getDO();
 			
 			//Creating the range control
-			var nodeAdmittanceRangeSlider = new NETWORK.Slider(NET_OBJ.nodeAdmittanceRange);
+			var nodeAdmittanceRangeSlider = new NETWORK.CONTROLS.Slider(NET_OBJ.nodeAdmittanceRange);
 			var initailVal = (NET_OBJ.nodeAdmittanceRange.max - NET_OBJ.nodeAdmittanceRange.min)/2
 			nodeAdmittanceRangeSlider.attachEvents();
 			
@@ -43,6 +43,9 @@ function drawGraph(event) {
 			
 			//Adding the compressed graph to the compressed network object.
 			COMPRESSED_NET.push(compressedGraph);
+			
+			//Adding the histogram to the right panel.
+			var histogramVoltage = new NETWORK.CONTROLS.Histogram(NET_OBJ.allVoltages,20,'#panelright',"Voltage Distribution in the network");
 			
 			var Solution = new NETWORK.Solution(NET_OBJ);
 			//Method to extract the different levels of KV along with tne number of nodes and their IDs;
@@ -56,7 +59,15 @@ function drawGraph(event) {
 		/*Logging NET_OBJ for reference purpose.*/
 		if(!parserError) {
 			setTimeout(function() {
+				//Making the panel triggers visible.
+				$('.triggers').removeClass('hidden');
+				
+				
+				
 				ngraph.main();
+				
+				
+				
 				$("#LoadSnippet").hide();
 				$(".standardNetworkGroup, #developedInfo").css("display","none");
 			},1500);
@@ -189,27 +200,52 @@ function preparePageForInteraction() {
 		addEventHandler(collection[i], 'drop', stopPropagationAndPreventDefault);
 	}
 	
-	//Making Panels
-	$('#sliderleft').slideReveal({
+	/***** Region Begins - Making Panels *****/
+	//This Code needs to be moved to the Panel.js file and needs to be made more generic.
+	$('#panelleft').slideReveal({
 		trigger: $("#triggerleft"),
 		push : false,
 		overlay: true,
 		position: "left",
 		width: 250,
 		speed: 700,
-		shown: function(slider, trigger){
-			console.log("slider opened!");
+		shown: function(panel, trigger){
+			console.log("panel opened!");
 		},
-		  hidden: function(slider, trigger){
-			console.log("slider closed!");
-		  },
-		  show: function(slider, trigger){
-			console.log("slider before opened!");
-		  },
-		  hide: function(slider, trigger){
-			console.log("slider before close!");
-		  }
+		hidden: function(panel, trigger){
+			$("#triggerleft").removeClass('hidden');
+		},
+		show: function(panel, trigger){
+			$("#triggerleft").addClass('hidden');
+		},
+		hide: function(panel, trigger){
+			console.log("panel before close!");
+		}
 	});
+	
+	$('#panelright').slideReveal({
+		trigger: $("#triggerright"),
+		push : false,
+		overlay: true,
+		position: "right",
+		width: 500,
+		speed: 700,
+		shown: function(panel, trigger){
+			console.log("panel opened!");
+		},
+		hidden: function(panel, trigger){
+			$("#triggerright").removeClass('hidden');
+		},
+		show: function(panel, trigger){
+			$("#triggerright").addClass('hidden');
+		},
+		hide: function(panel, trigger){
+			console.log("panel before close!");
+		}
+	});
+	
+	
+	/***** Region Ends - Making Panels *****/
 }
 	
 function addEventHandler(obj, evt, handler) {

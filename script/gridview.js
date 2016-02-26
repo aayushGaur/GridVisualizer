@@ -60,7 +60,7 @@
 		var pixiGraphics = createPixiGraphics(graph);
 
 		var stage = pixiGraphics.stage;
-		stage.hitArea = new PIXI.Rectangle(0, 0, (window.innerWidth - 199), window.innerHeight);
+		stage.hitArea = new PIXI.Rectangle(0, 0, window.innerWidth, window.innerHeight);
 	  
 		stage.interaction = true;
 		//stage.interactive = true;  
@@ -1499,9 +1499,10 @@ module.exports = function (graph, settings) {
 
     layout = createLayout(graph, physics(settings.physics));
   }
-
-  var width = settings.container.clientWidth,
-      height = settings.container.clientHeight;
+  
+  //updating the height and widhth of the container.
+  var width = settings.container.clientWidth - 72,
+      height = settings.container.clientHeight - 6;
   var stage = new PIXI.Stage(settings.background, true);
   var renderer = PIXI.autoDetectRenderer(width, height, null, false, true);
 

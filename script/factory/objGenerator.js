@@ -200,11 +200,12 @@
 	*	All these functionalities were in separate methods but now have been combined into one in order to avoid multiple looping over the nodes (for large graphs).
 	**/
 	NETWORK.ObjectFactory.prototype.updateNodeData = function(n) {
-		var nMap = {}, bO, tD = [], tdI="", i, j, gO, aDo, id, b, lObj, sObj;
+		var nMap = {}, bO, tD = [], tdI="", i, j, gO, aDo, id, b, lObj, sObj, allVoltages = [];
 		for(i = 0; i < n.busDO.dOL.length; i++) {
 			nMap[n.busDO.dOL[i].bus_i] = i;
 			
 			bO = n.busDO.dOL[i];
+			allVoltages.push(parseInt(bO.baseKV));
 			/***** Region Begins Top Decorators and Generators*****/
 			//As of now only the ID is added to the gen data object - the data added needs to updated. - 16/12/2014.
 			
@@ -281,6 +282,7 @@
 		
 		//Adding Node Branch Map to the NETWORK - This has been added to NETWORK because once created it is independent of the Data Object
 		NETWORK["nodeEdgeMap"] = nMap;
+		n["allVoltages"] = allVoltages;
 	};
 
 	/**
