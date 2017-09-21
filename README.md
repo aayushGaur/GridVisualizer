@@ -9,9 +9,8 @@ GridVisualizer is a web-based tool that is aimed at helping power system researc
 1. HTML5
 2. CSS3
 3. JavaScript and JQuery.
-4. Frameworks - [D3](http://d3js.org/)
-5. Frameworks - [D3](https://github.com/pixijs/pixi.js)
-6. Other Libraries used - [RangeSlider] (http://rangeslider.js.org/) and [SlideReveal] (https://nnattawat.github.io/slideReveal/)<br>
+4. Frameworks - [D3](http://d3js.org/) and [PIXI] (https://github.com/pixijs/pixi.js)
+5. Other Libraries used - [RangeSlider] (http://rangeslider.js.org/) and [SlideReveal] (https://nnattawat.github.io/slideReveal/)<br>
 
 ### How it works
-As this tool is created for the power network researchers it requires data to be passed with a specific type format. In case you need discuss the future scope of this project plesae contact me at 'aayush.gaur@gmail.com'. Please do note that the project is available under MIT license.
+As this tool is created for the power network researchers it requires data to be passed with a specific type format. In case you need discuss the future scope of this project please contact me at 'aayush.gaur@gmail.com'. Please do note that the project is available under MIT license.
