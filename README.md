@@ -9,7 +9,7 @@ GridVisualizer is a web-based tool that is aimed at helping power system researc
 1. HTML5
 2. CSS3
 3. JavaScript and JQuery.
-4. Frameworks - [D3](http://d3js.org/) and [PIXI] (https://github.com/pixijs/pixi.js)
+4. Frameworks - [D3](http://d3js.org/) and [PIXI](https://github.com/pixijs/pixi.js)
 5. Other Libraries used - [RangeSlider] (http://rangeslider.js.org/) and [SlideReveal] (https://nnattawat.github.io/slideReveal/)<br>
 
 ### How it works
