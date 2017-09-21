@@ -1,2 +1,17 @@
 # GridVisualizer
-This is a web based tool to generate visualisations of verylarge realworld power networks in order to efficiently communicate the structure of these networks to the power system researchers and practitioners. It has been developed as a part of summer research project in collaboration with NICTA (Data61) and Monash University.  The first version of the tool will be tagged by 31 March 2016.
+
+## Motivation behind stac
+Very Large Power Networks are extremely complex systems often spanning over 1000 buses at a time. Understanding, Interpreting and Visualizing them is a challenging and tedious process. The GridVisualizer project looks to make that process easier through a visualization tool for power networks. <br>
+
+GridVisualizer is a web-based tool that is aimed at helping power system researchers to understand their network datasets and the results of their research.
+
+### Technologies used:
+1. HTML5
+2. CSS3
+3. JavaScript and JQuery.
+4. Frameworks - [D3](http://d3js.org/)
+5. Frameworks - [D3](https://github.com/pixijs/pixi.js)
+6. Other Libraries used - [RangeSlider] (http://rangeslider.js.org/) and [SlideReveal] (https://nnattawat.github.io/slideReveal/)<br>
+
+### How it works
+As this tool is created for the power network researchers it requires data to be passed with a specific type format. In case you need discuss the future scope of this project plesae contact me at 'aayush.gaur@gmail.com'. Please do note that the project is available under MIT license.
