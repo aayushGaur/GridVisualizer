@@ -1,6 +1,6 @@
 # GridVisualizer
 
-## Motivation behind stac
+## Motivation behind GridVisualizer
 Very Large Power Networks are extremely complex systems often spanning over 1000 buses at a time. Understanding, Interpreting and Visualizing them is a challenging and tedious process. The GridVisualizer project looks to make that process easier through a visualization tool for power networks. <br>
 
 GridVisualizer is a web-based tool that is aimed at helping power system researchers to understand their network datasets and the results of their research.
